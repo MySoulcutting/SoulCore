@@ -1,0 +1,8 @@
+# 要开启的模块
+Module:
+  #自动复活
+  AutoRespawn: true
+  #轻功
+  LightKungFu: true
+  #掉落物特效
+  DropItemEffect: true

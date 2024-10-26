@@ -1,0 +1,17 @@
+ItemEffect:
+  # 唯一名
+  超级彩虹:
+    # 物品名
+    ItemName: "超级彩虹"
+    # 特效贴图路径 (models/particle)
+    EffectPath: "rainbow.particle"
+    # 特效持续时间
+    Time: "9999"
+  # 唯一名
+  魔法:
+    # 物品名
+    ItemName: "钻石大剑"
+    # 特效贴图路径 (models/particle)
+    EffectPath: "magic.particle"
+    # 特效持续时间
+    Time: "9999"
