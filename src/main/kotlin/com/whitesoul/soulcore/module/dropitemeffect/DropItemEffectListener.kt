@@ -1,5 +1,6 @@
 package com.whitesoul.soulcore.module.dropitemeffect
 
+import com.whitesoul.soulcore.file.FileDropItemEffect
 import eos.moe.dragoncore.network.PacketSender
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
@@ -11,6 +12,8 @@ import org.bukkit.event.entity.ItemDespawnEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
+import taboolib.module.chat.uncolored
+import taboolib.platform.util.hasName
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -19,29 +22,34 @@ object DropItemEffectListener: Listener {
 
     @EventHandler
     fun onDropItemEvent(e: ItemSpawnEvent) {
-        val world = e.entity.world
-        val itemLoc = Location(e.entity.world, e.entity.location.x, e.entity.location.y - 1, e.entity.location.z)
-        // 生成盔甲架
-        val effectEntity: ArmorStand = world.spawnEntity(itemLoc, EntityType.ARMOR_STAND) as ArmorStand
-        e.entity.addPassenger(effectEntity)
-        effectEntity.customName = "drop-item-effect"
-        effectEntity.isInvulnerable = true
-        effectEntity.isVisible = false
-        effectEntity.isSmall = true
-        val effectUUID = effectEntity.uniqueId
-        dropItemMap[e.entity.uniqueId] = e.entity
-        // 发包特效
-        for (player in e.entity.world.players) {
-            PacketSender.addParticle(
-                player,
-                "rainbow.particle",
-                e.entity.uniqueId.toString(),
-                effectUUID.toString(),
-                "0,0,0",
-                9999
-            )
+        if (FileDropItemEffect.dropItemEffect.containsKey(e.entity?.itemStack?.itemMeta?.displayName?.uncolored())) {
+            val dropItem = FileDropItemEffect.dropItemEffect[e.entity.itemStack.itemMeta.displayName.uncolored()]
+            val effectPath = dropItem?.effectPath
+            val time = dropItem?.time!!
+            val world = e.entity.world
+            val itemLoc = Location(e.entity.world, e.entity.location.x, e.entity.location.y - 1, e.entity.location.z)
+            // 生成盔甲架
+            val effectEntity: ArmorStand = world.spawnEntity(itemLoc, EntityType.ARMOR_STAND) as ArmorStand
+            e.entity.addPassenger(effectEntity)
+            effectEntity.customName = "drop-item-effect"
+            effectEntity.isInvulnerable = true
+            effectEntity.isVisible = false
+            effectEntity.isSmall = true
+            val effectUUID = effectEntity.uniqueId
+            dropItemMap[e.entity.uniqueId] = e.entity
+            // 发包特效
+            for (player in e.entity.world.players) {
+                PacketSender.addParticle(
+                    player,
+                    effectPath,
+                    e.entity.uniqueId.toString(),
+                    effectUUID.toString(),
+                    "0,0,0",
+                    time
+                )
+            }
         }
-    }
+        }
     // 物品合并取消
     @EventHandler
     fun onItemMergeEvent(e: ItemMergeEvent) {
