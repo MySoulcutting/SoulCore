@@ -7,7 +7,7 @@ import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigFile
 
 object FileDropItemEffect {
-    @Config("DropItemEffect.yml")
+    @Config("DropItemEffect.yml", autoReload = true)
     lateinit var file: ConfigFile
     val dropItemEffect = HashMap<String, DropItem>()
     @Awake(LifeCycle.LOAD)

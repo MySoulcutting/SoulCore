@@ -13,7 +13,6 @@ import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
 import taboolib.module.chat.uncolored
-import taboolib.platform.util.hasName
 import java.util.*
 import kotlin.collections.HashMap
 
