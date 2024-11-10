@@ -12,6 +12,7 @@ import org.bukkit.event.entity.ItemDespawnEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
+import taboolib.common.platform.function.submit
 import taboolib.module.chat.uncolored
 import java.util.*
 import kotlin.collections.HashMap
@@ -36,19 +37,25 @@ object DropItemEffectListener: Listener {
             effectEntity.isSmall = true
             val effectUUID = effectEntity.uniqueId
             dropItemMap[e.entity.uniqueId] = e.entity
-            // 发包特效
-            for (player in e.entity.world.players) {
-                PacketSender.addParticle(
-                    player,
-                    effectPath,
-                    e.entity.uniqueId.toString(),
-                    effectUUID.toString(),
-                    "0,0,0",
-                    time
-                )
+            // 当掉落在地上时触发
+            submit(period = 1) {
+                if (e.entity.isOnGround) {
+                    // 发包特效
+                    for (player in e.entity.world.players) {
+                        PacketSender.addParticle(
+                            player,
+                            effectPath,
+                            e.entity.uniqueId.toString(),
+                            effectUUID.toString(),
+                            "0,0,0",
+                            time
+                        )
+                    }
+                    cancel()
+                }
             }
         }
-        }
+    }
     // 物品合并取消
     @EventHandler
     fun onItemMergeEvent(e: ItemMergeEvent) {
