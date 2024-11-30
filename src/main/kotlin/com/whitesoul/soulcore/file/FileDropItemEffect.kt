@@ -12,6 +12,7 @@ object FileDropItemEffect {
     @Config("DropItemEffect.yml")
     lateinit var file: ConfigFile
     val dropItemEffect = HashMap<String, DropItem>()
+
     @Awake(LifeCycle.LOAD)
     fun load() {
         val sec = file.getConfigurationSection("ItemEffect")?.getKeys(false)
@@ -24,6 +25,7 @@ object FileDropItemEffect {
             }
         }
     }
+
     @Awake(LifeCycle.ENABLE)
     fun AutoReload() {
         AutoReloadFileUtil.watcher().addSimpleListener(file.file) {

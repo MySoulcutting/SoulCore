@@ -21,12 +21,8 @@ object LightKungFuListener: Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
-        if (player.hasPermission("soulcore.lightkungfu")) {
-            submit(delay = 60) {
-                jumps[player.uniqueId] = 0
-                player.allowFlight = true
-            }
-        }
+        jumps[player.uniqueId] = 0
+        player.allowFlight = true
     }
     @EventHandler
     fun onEntityFallDamage(e: EntityDamageEvent) {
