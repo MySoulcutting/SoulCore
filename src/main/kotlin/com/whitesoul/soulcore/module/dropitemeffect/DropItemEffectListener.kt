@@ -1,6 +1,6 @@
 package com.whitesoul.soulcore.module.dropitemeffect
 
-import com.whitesoul.soulcore.file.FileDropItemEffect
+import com.whitesoul.soulcore.file.DropItemEffectFile
 import eos.moe.dragoncore.network.PacketSender
 import org.bukkit.Location
 import org.bukkit.entity.ArmorStand
@@ -12,6 +12,7 @@ import org.bukkit.event.entity.ItemDespawnEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
+import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.uncolored
 import java.util.*
@@ -20,10 +21,10 @@ import kotlin.collections.HashMap
 object DropItemEffectListener: Listener {
     private val dropItemMap = HashMap<UUID, Entity>()
 
-    @EventHandler
+    @SubscribeEvent
     fun onDropItemEvent(e: ItemSpawnEvent) {
-        if (FileDropItemEffect.dropItemEffect.containsKey(e.entity?.itemStack?.itemMeta?.displayName?.uncolored())) {
-            val dropItem = FileDropItemEffect.dropItemEffect[e.entity.itemStack.itemMeta.displayName.uncolored()]
+        if (DropItemEffectFile.dropItemEffect.containsKey(e.entity?.itemStack?.itemMeta?.displayName?.uncolored())) {
+            val dropItem = DropItemEffectFile.dropItemEffect[e.entity.itemStack.itemMeta.displayName.uncolored()]
             val effectPath = dropItem?.effectPath
             val time = dropItem?.time!!
             val world = e.entity.world
@@ -57,7 +58,7 @@ object DropItemEffectListener: Listener {
         }
     }
     // 物品合并取消
-    @EventHandler
+    @SubscribeEvent
     fun onItemMergeEvent(e: ItemMergeEvent) {
         val itemEntity = dropItemMap[e.entity.uniqueId]
         if (itemEntity != null) {
@@ -65,7 +66,7 @@ object DropItemEffectListener: Listener {
         }
     }
     // 物品消失 清除特效
-    @EventHandler
+    @SubscribeEvent
     fun onDropItemRemoveEvent(e: ItemDespawnEvent) {
         val itemEntity = dropItemMap[e.entity.uniqueId]
         if (itemEntity != null) {
@@ -77,7 +78,7 @@ object DropItemEffectListener: Listener {
         }
     }
     // 玩家捡起 清除特效
-    @EventHandler
+    @SubscribeEvent
     fun onPlayerPickupItemEvent(e: PlayerPickupItemEvent) {
         val itemEntity = dropItemMap[e.item.uniqueId]
         if (itemEntity != null) {

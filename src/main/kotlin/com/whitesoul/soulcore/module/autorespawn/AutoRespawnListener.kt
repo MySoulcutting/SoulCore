@@ -8,7 +8,7 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 
 object AutoRespawnListener: Listener {
-    @EventHandler
+    @SubscribeEvent
     fun onRespawn(e: PlayerDeathEvent) {
         val player = e.entity
         submit(delay = 5) {
